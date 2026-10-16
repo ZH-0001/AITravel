@@ -1,0 +1,53 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${PORT:8080}
+  servlet:
+    session:
+      timeout: 120m
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:false}
+spring:
+  config:
+    import: "optional:file:./backend/.env.local[.properties],optional:file:./.env.local[.properties]"
+  profiles:
+    active: ${DB_PROFILE:default}
+  datasource:
+    url: jdbc:h2:file:./.data/travel;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password: ''
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+  jackson:
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+  mvc:
+    problemdetails:
+      enabled: false
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+travel:
+  mode: ${TRAVEL_MODE:demo}
+  deepseek-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+  deepseek-key: ${DEEPSEEK_API_KEY:}
+  model: ${DEEPSEEK_MODEL:deepseek-v4-pro}
+  search-url: ${SEARCH_BASE_URL:https://api.bochaai.com/v1}
+  search-key: ${BOCHA_API_KEY:}
+  workers: 2
+  queue-size: 8
+  per-minute: 3
+  phase-seconds: 120
+  task-seconds: 240
+  admin-username: ${ADMIN_USERNAME:}
+  admin-password: ${ADMIN_PASSWORD:}
+  input-price-per-million: ${DEEPSEEK_INPUT_PRICE:}
+  output-price-per-million: ${DEEPSEEK_OUTPUT_PRICE:}
+  search-price-per-request: ${BOCHA_PRICE_PER_REQUEST:}
+  price-currency: ${PRICE_CURRENCY:CNY}
